@@ -17,14 +17,14 @@ import lombok.NoArgsConstructor;
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long userId;
 	@jakarta.validation.constraints.NotBlank(message = "User Name is required")
-	private String name;
+	private String userName;
 	@jakarta.validation.constraints.NotBlank(message = "Password is required")
 	private String password;
 	@jakarta.validation.constraints.Email
 	@jakarta.validation.constraints.NotBlank(message = "Email is required")
-	private String Email;
+	private String email;
 	private Instant createDate;
 	private boolean enabled;
 }

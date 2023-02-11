@@ -21,13 +21,13 @@ import lombok.NoArgsConstructor;
 public class Vote {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long voteId;
 	private VoteType voteType;
 	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id", referencedColumnName = "id")
+	@JoinColumn(name = "postId", referencedColumnName = "postId")
 	private Post post;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id", referencedColumnName = "id")
+	@JoinColumn(name = "userId", referencedColumnName = "userId")
 	private User user;
 }

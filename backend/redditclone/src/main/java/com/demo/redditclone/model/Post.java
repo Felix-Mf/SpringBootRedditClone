@@ -24,9 +24,9 @@ import lombok.NoArgsConstructor;
 public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long postId;
 	@jakarta.validation.constraints.NotBlank(message = "Post Name can not be empty or null")
-	private String name;
+	private String postName;
 	@Nullable
 	private String url;
 	@Nullable
@@ -35,9 +35,9 @@ public class Post {
 	private Integer voteCount;
 	private Instant createDate;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id", referencedColumnName = "id")
+	@JoinColumn(name = "userId", referencedColumnName = "userId")
 	private User user;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id", referencedColumnName = "id")
+	@JoinColumn(name = "subredditId", referencedColumnName = "subredditId")
 	private Subreddit subreddit;
 }

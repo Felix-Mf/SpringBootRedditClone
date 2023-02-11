@@ -21,14 +21,14 @@ import lombok.NoArgsConstructor;
 public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long commentId;
 	@NotEmpty
 	private String text;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id", referencedColumnName = "id")
+	@JoinColumn(name = "postId", referencedColumnName = "postId")
 	private Post post;
 	private Instant createDate;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id", referencedColumnName = "id")
+	@JoinColumn(name = "userId", referencedColumnName = "userId")
 	private User user;
 }

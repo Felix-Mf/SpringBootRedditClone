@@ -23,9 +23,9 @@ import lombok.NoArgsConstructor;
 public class Subreddit {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private Long subredditId;
 	@jakarta.validation.constraints.NotBlank(message = "Subreddit Name can not be empty or null")
-	private String name;
+	private String subredditName;
 	@jakarta.validation.constraints.NotBlank(message = "Description is required")
 	private String description;
 	private Instant createDate;
