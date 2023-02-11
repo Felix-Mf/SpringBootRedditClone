@@ -1,6 +1,7 @@
 package com.demo.redditclone.service;
 
 import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.demo.redditclone.dto.RegisterRequest;
+import com.demo.redditclone.exceptions.SpringBootRedditException;
 import com.demo.redditclone.model.Notification;
 import com.demo.redditclone.model.User;
 import com.demo.redditclone.model.VerificationToken;
@@ -18,6 +20,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class AuthService {
 
 	private final PasswordEncoder passwordEncoder;
@@ -25,7 +28,6 @@ public class AuthService {
 	private final VerificationTokenRepository verificationTokenRepository;
 	private final MailService mailService;
 
-	@Transactional
 	public void signup(RegisterRequest registerRequest) {
 		User user = new User();
 		user.setEmail(registerRequest.getEmail());
@@ -52,4 +54,16 @@ public class AuthService {
 		verificationTokenRepository.save(verificationToken);
 		return token;
 	}
+	
+	public void verifyAccount(String token) {
+        Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
+        fetchUserAndEnable(verificationToken.orElseThrow(() -> new SpringBootRedditException("Invalid Token")));
+    }
+	
+	private void fetchUserAndEnable(VerificationToken verificationToken) {
+        String email = verificationToken.getUser().getEmail();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new SpringBootRedditException("User not found with email - " + email));
+        user.setEnabled(true);
+        userRepository.save(user);
+    }
 }
