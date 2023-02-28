@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.demo.redditclone.dto.AuthenticationResponse;
 import com.demo.redditclone.dto.LoginRequest;
+import com.demo.redditclone.dto.RefreshTokenRequest;
 import com.demo.redditclone.dto.RegisterRequest;
 import com.demo.redditclone.exceptions.SpringBootRedditException;
 import com.demo.redditclone.model.Notification;
@@ -67,6 +68,17 @@ public class AuthService {
 		verificationTokenRepository.save(verificationToken);
 		return token;
 	}
+	
+	public AuthenticationResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+        refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
+        String token = jwtProvider.generateTokenWithUserName(refreshTokenRequest.getUsername());
+        return AuthenticationResponse.builder()
+                .authenticationToken(token)
+                .refreshToken(refreshTokenRequest.getRefreshToken())
+                .expiresAt(Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis()))
+                .username(refreshTokenRequest.getUsername())
+                .build();
+    }
 	
 	public void verifyAccount(String token) {
         Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
